@@ -1,0 +1,17 @@
+{
+	"name": "ComplaintsBlob",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "HttpServer_ComplaintsData",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

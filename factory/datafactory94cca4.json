@@ -1,0 +1,17 @@
+{
+	"name": "datafactory94cca4",
+	"properties": {
+		"globalConfigurations": {
+			"PipelineBillingEnabled": "true",
+			"factoryStagingLSReferenceName": "AzureBlobStorageH1b",
+			"factoryStagingLSType": "LinkedServiceReference",
+			"factoryStagingFolderPath": "datafactory"
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "0c200e9a-58b3-4e80-8c0c-041bb96033db",
+		"tenantId": "d57d32cc-c121-488f-b07b-dfe705680c71"
+	}
+}
