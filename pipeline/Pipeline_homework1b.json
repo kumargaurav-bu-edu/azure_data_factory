@@ -35,7 +35,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ComplaintsBlob",
+						"referenceName": "ComplaintsHttpDS",
 						"type": "DatasetReference"
 					}
 				],
