@@ -5,19 +5,13 @@
       "referenceName": "AzureBlobStorageH1b",
       "type": "LinkedServiceReference"
     },
-    "annotations": [],
-    "type": "DelimitedText",
+    "type": "Binary",
     "typeProperties": {
       "location": {
         "type": "AzureBlobStorageLocation",
         "container": "output",
         "folderPath": "extracted"
-      },
-      "columnDelimiter": ",",
-      "rowDelimiter": "\n",
-      "encodingName": "utf-8",
-      "firstRowAsHeader": false
+      }
     }
-  },
-  "type": "Microsoft.DataFactory/factories/datasets"
+  }
 }
