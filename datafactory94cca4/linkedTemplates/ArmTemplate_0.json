@@ -104,6 +104,9 @@
 						"type": "AzureBlobStorageLocation",
 						"fileName": "FLAT_CMPL.zip",
 						"container": "output"
+					},
+					"compression": {
+						"type": "ZipDeflate"
 					}
 				}
 			},
@@ -133,7 +136,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Pipelile_homework1b')]",
+			"name": "[concat(parameters('factoryName'), '/Pipeline_homework1b')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -208,17 +211,18 @@
 								"type": "BinarySource",
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
-									"recursive": true
+									"recursive": false
 								},
 								"formatSettings": {
-									"type": "BinaryReadSettings"
-								},
-								"compression": {
-									"type": "ZipDeflate"
+									"type": "BinaryReadSettings",
+									"compressionProperties": {
+										"type": "ZipDeflateReadSettings",
+										"preserveZipFileNameAsFolder": false
+									}
 								}
 							},
 							"sink": {
-								"type": "BlobSink",
+								"type": "BinarySink",
 								"storeSettings": {
 									"type": "AzureBlobStorageWriteSettings",
 									"copyBehavior": "PreserveHierarchy"
