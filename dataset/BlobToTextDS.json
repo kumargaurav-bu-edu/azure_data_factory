@@ -6,17 +6,13 @@
       "type": "LinkedServiceReference"
     },
     "annotations": [],
-    "type": "DelimitedText",
+    "type": "Binary",
     "typeProperties": {
       "location": {
         "type": "AzureBlobStorageLocation",
-        "container": "kgomdsconth1b",
-        "folderPath": "output/extracted"
-      },
-      "columnDelimiter": ",",
-      "rowDelimiter": "\n",
-      "encodingName": "UTF-8",
-      "firstRowAsHeader": false
+        "container": "output",
+        "folderPath": "extracted"
+      }
     }
   },
   "type": "Microsoft.DataFactory/factories/datasets"
