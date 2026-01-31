@@ -97,21 +97,19 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "BinarySource",
+								"type": "BlobSource",
+								"recursive": true,
+								"compression": {
+									"type": "Zip"
+								},
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
 									"recursive": false,
 									"deleteFilesAfterCompletion": false
-								},
-								"formatSettings": {
-									"type": "BinaryReadSettings"
 								}
 							},
 							"sink": {
-								"type": "BinarySink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								}
+								"type": "BlobSink"
 							},
 							"enableStaging": false
 						},
@@ -157,8 +155,8 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": "output",
-						"container": "kgomdsconth1b"
+						"folderPath": "extracted",
+						"container": "output"
 					}
 				}
 			},
