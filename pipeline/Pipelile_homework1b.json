@@ -35,7 +35,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ComplaintsBlob",
+						"referenceName": "ComplaintsHttpDS",
 						"type": "DatasetReference"
 					}
 				],
@@ -67,14 +67,15 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "BlobSource",
+						"type": "BinarySource",
 						"compression": {
 							"type": "ZipDeflate"
 						},
 						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
-							"recursive": false,
-							"deleteFilesAfterCompletion": false
+							"type": "AzureBlobStorageReadSettings"
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings"
 						}
 					},
 					"sink": {

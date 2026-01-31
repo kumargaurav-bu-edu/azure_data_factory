@@ -1,5 +1,5 @@
 {
-	"name": "ComplaintsBlob_legacy",
+	"name": "ComplaintsHttpDS",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "HttpServer_ComplaintsData",
