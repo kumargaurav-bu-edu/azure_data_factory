@@ -369,7 +369,8 @@
 									"recursive": false
 								},
 								"formatSettings": {
-									"type": "BinaryReadSettings"
+									"type": "BinaryReadSettings",
+									"preserveZipFileNameAsFolder": false
 								}
 							},
 							"sink": {
