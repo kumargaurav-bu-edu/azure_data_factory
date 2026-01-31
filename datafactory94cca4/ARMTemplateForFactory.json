@@ -148,6 +148,70 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Test_Step1_HttpsToBlob')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Test only Step 1: Copy FLAT_CMPL.zip from HTTPS to Blob (binary, no compression). Run this to verify the blob matches the source before testing unzip.",
+				"activities": [
+					{
+						"name": "CopyComplaintsDataFromHttps",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "BinarySource",
+								"storeSettings": {
+									"type": "HttpReadSettings",
+									"requestMethod": "GET"
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							},
+							"sink": {
+								"type": "BinarySink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "ComplaintsHttpDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ComplaintsBlobStageDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ComplaintsHttpDS')]",
+				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageDS')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/BlobToTextDS')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -186,9 +250,6 @@
 						"type": "AzureBlobStorageLocation",
 						"fileName": "FLAT_CMPL.zip",
 						"container": "output"
-					},
-					"compression": {
-						"type": "ZipDeflate"
 					}
 				}
 			},
