@@ -67,21 +67,18 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "BinarySource",
+						"type": "BlobSource",
+						"compression": {
+							"type": "Zip"
+						},
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": false,
 							"deleteFilesAfterCompletion": false
-						},
-						"formatSettings": {
-							"type": "BinaryReadSettings"
 						}
 					},
 					"sink": {
-						"type": "BinarySink",
-						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings"
-						}
+						"type": "BlobSink"
 					},
 					"enableStaging": false
 				},

@@ -1,19 +1,22 @@
 {
-	"name": "BlobToTextDS",
-	"properties": {
-		"linkedServiceName": {
-			"referenceName": "AzureBlobStorageForZipExtraction",
-			"type": "LinkedServiceReference"
-		},
-		"annotations": [],
-		"type": "Binary",
-		"typeProperties": {
-			"location": {
-				"type": "AzureBlobStorageLocation",
-				"folderPath": "output",
-				"container": "kgomdsconth1b"
-			}
-		}
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+  "name": "BlobToTextDS",
+  "properties": {
+    "linkedServiceName": {
+      "referenceName": "AzureBlobStorageForZipExtraction",
+      "type": "LinkedServiceReference"
+    },
+    "annotations": [],
+    "type": "DelimitedText",
+    "typeProperties": {
+      "location": {
+        "type": "AzureBlobStorageLocation",
+        "folderPath": "output/extracted",
+        "container": "kgomdsconth1b"
+      },
+      "columnDelimiter": ",",
+      "encodingName": "utf-8",
+      "firstRowAsHeader": false
+    }
+  },
+  "type": "Microsoft.DataFactory/factories/datasets"
 }
