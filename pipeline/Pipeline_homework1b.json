@@ -1,5 +1,5 @@
 {
-	"name": "Pipelile_homework1b",
+	"name": "Pipeline_homework1b",
 	"properties": {
 		"activities": [
 			{
@@ -35,7 +35,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ComplaintsHttpDS",
+						"referenceName": "ComplaintsBlob",
 						"type": "DatasetReference"
 					}
 				],
@@ -68,23 +68,25 @@
 				"typeProperties": {
 					"source": {
 						"type": "BinarySource",
-						"compression": {
-							"type": "ZipDeflate"
-						},
 						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings"
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": false
 						},
 						"formatSettings": {
-							"type": "BinaryReadSettings"
+							"type": "BinaryReadSettings",
+							"compressionProperties": {
+								"type": "ZipDeflateReadSettings",
+								"preserveZipFileNameAsFolder": false
+							}
 						}
 					},
 					"sink": {
-							"type": "BlobSink",
-							"storeSettings": {
-								"type": "AzureBlobStorageWriteSettings",
-								"copyBehavior": "PreserveHierarchy"
-							}
-						},
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings",
+							"copyBehavior": "PreserveHierarchy"
+						}
+					},
 					"enableStaging": false
 				},
 				"inputs": [
