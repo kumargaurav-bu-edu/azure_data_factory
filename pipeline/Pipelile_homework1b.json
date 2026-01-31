@@ -69,7 +69,7 @@
 					"source": {
 						"type": "BlobSource",
 						"compression": {
-							"type": "Zip"
+							"type": "ZipDeflate"
 						},
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
@@ -81,7 +81,7 @@
 							"type": "BlobSink",
 							"storeSettings": {
 								"type": "AzureBlobStorageWriteSettings",
-								"copyBehavior": "FlattenHierarchy"
+								"copyBehavior": "PreserveHierarchy"
 							}
 						},
 					"enableStaging": false
