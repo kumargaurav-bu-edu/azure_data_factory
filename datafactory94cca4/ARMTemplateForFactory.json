@@ -103,11 +103,7 @@
 									"recursive": false
 								},
 								"formatSettings": {
-									"type": "BinaryReadSettings",
-									"compressionProperties": {
-										"type": "ZipDeflateReadSettings",
-										"preserveZipFileNameAsFolder": false
-									}
+									"type": "BinaryReadSettings"
 								}
 							},
 							"sink": {
@@ -121,7 +117,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "ComplaintsBlobStageDS",
+								"referenceName": "ComplaintsZipSourceDS",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -144,6 +140,7 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ComplaintsHttpDS')]",
 				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageDS')]",
+				"[concat(variables('factoryId'), '/datasets/ComplaintsZipSourceDS')]",
 				"[concat(variables('factoryId'), '/datasets/BlobToTextDS')]"
 			]
 		},
@@ -238,11 +235,7 @@
 									"recursive": false
 								},
 								"formatSettings": {
-									"type": "BinaryReadSettings",
-									"compressionProperties": {
-										"type": "ZipDeflateReadSettings",
-										"preserveZipFileNameAsFolder": false
-									}
+									"type": "BinaryReadSettings"
 								}
 							},
 							"sink": {
@@ -256,7 +249,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "ComplaintsBlobStageDS",
+								"referenceName": "ComplaintsZipSourceDS",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -276,7 +269,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageDS')]",
+				"[concat(variables('factoryId'), '/datasets/ComplaintsZipSourceDS')]",
 				"[concat(variables('factoryId'), '/datasets/BlobToTextDS')]"
 			]
 		},
@@ -345,6 +338,32 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/HttpServer_ComplaintsData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ComplaintsZipSourceDS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorageH1b",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "FLAT_CMPL.zip",
+						"container": "output"
+					},
+					"compression": {
+						"type": "ZipDeflate"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageH1b')]"
 			]
 		},
 		{
