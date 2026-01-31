@@ -10,8 +10,8 @@
     "typeProperties": {
       "location": {
         "type": "AzureBlobStorageLocation",
-        "folderPath": "output/extracted",
-        "container": "kgomdsconth1b"
+        "folderPath": "extracted",
+        "container": "output"
       },
       "columnDelimiter": ",",
       "encodingName": "utf-8",
