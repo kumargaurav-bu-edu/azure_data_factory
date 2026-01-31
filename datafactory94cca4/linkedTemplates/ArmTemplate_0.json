@@ -89,27 +89,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ComplaintsBlob')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "HttpServer_ComplaintsData",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Binary",
-				"typeProperties": {
-					"location": {
-						"type": "HttpServerLocation"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/HttpServer_ComplaintsData')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/ComplaintsBlobStageDS')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -130,6 +109,27 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageH1b')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ComplaintsHttpDS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "HttpServer_ComplaintsData",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "HttpServerLocation"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/HttpServer_ComplaintsData')]"
 			]
 		},
 		{
@@ -171,7 +171,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "ComplaintsBlob",
+								"referenceName": "ComplaintsHttpDS",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -205,15 +205,16 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "BlobSource",
-								"recursive": true,
-								"compression": {
-									"type": "ZipDeflate"
-								},
+								"type": "BinarySource",
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
-									"recursive": false,
-									"deleteFilesAfterCompletion": false
+									"recursive": true
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								},
+								"compression": {
+									"type": "ZipDeflate"
 								}
 							},
 							"sink": {
@@ -248,7 +249,7 @@
 				"lastPublishTime": "2026-01-30T18:14:53Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ComplaintsBlob')]",
+				"[concat(variables('factoryId'), '/datasets/ComplaintsHttpDS')]",
 				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageDS')]",
 				"[concat(variables('factoryId'), '/datasets/BlobToTextDS')]"
 			]
