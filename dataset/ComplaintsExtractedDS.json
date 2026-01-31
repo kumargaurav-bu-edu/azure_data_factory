@@ -1,5 +1,5 @@
 {
-	"name": "ComplaintsBlobStageDS_NoExt",
+	"name": "ComplaintsExtractedDS",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorageH1b",
@@ -10,8 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "FLAT_CMPL",
-				"container": "output"
+				"container": "output",
+				"folderPath": "extracted"
 			}
 		}
 	},

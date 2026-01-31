@@ -39,7 +39,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ComplaintsBlobStageDS_NoExt",
+						"referenceName": "ComplaintsBlobStageNoExtDS",
 						"type": "DatasetReference"
 					}
 				]
@@ -88,7 +88,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "BlobToTextDS",
+						"referenceName": "ComplaintsExtractedDS",
 						"type": "DatasetReference"
 					}
 				]

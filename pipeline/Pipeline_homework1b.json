@@ -47,7 +47,7 @@
 				]
 			},
 			{
-				"name": "BlobToTxt",
+				"name": "CopyZipToNoExt",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -71,9 +71,54 @@
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": false
-						},
-						"formatSettings": {
-							"type": "BinaryReadSettings"
+						}
+					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "ComplaintsBlobStageDS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ComplaintsBlobStageNoExtDS",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "BlobToTxt",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "CopyZipToNoExt",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": false
 						}
 					},
 					"sink": {
@@ -93,7 +138,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "BlobToTextDS",
+						"referenceName": "ComplaintsExtractedDS",
 						"type": "DatasetReference"
 					}
 				]
