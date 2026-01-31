@@ -1,5 +1,5 @@
 {
-	"name": "ComplaintsZipSourceDS",
+	"name": "ComplaintsBlobStageDS_NoExt",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorageH1b",
@@ -12,9 +12,6 @@
 				"type": "AzureBlobStorageLocation",
 				"fileName": "FLAT_CMPL",
 				"container": "output"
-			},
-			"compression": {
-				"type": "ZipDeflate"
 			}
 		}
 	},

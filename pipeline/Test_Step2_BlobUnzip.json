@@ -1,10 +1,10 @@
 {
 	"name": "Test_Step2_BlobUnzip",
 	"properties": {
-		"description": "Test only Step 2: Unzip FLAT_CMPL.zip from Blob and write extracted files to output/extracted. Run after Step 1 has copied the zip to blob (or use Test_Step1_HttpsToBlob first).",
+		"description": "Test only Step 2: Copy FLAT_CMPL.zip to FLAT_CMPL (no ext), then unzip to output/extracted/FLAT_CMPL/. Run after Step 1 (Test_Step1_HttpsToBlob) has copied the zip to blob.",
 		"activities": [
 			{
-				"name": "BlobToTxt",
+				"name": "CopyZipToNoExt",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -26,8 +26,56 @@
 					"sink": {
 						"type": "BinarySink",
 						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "ComplaintsBlobStageDS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ComplaintsBlobStageDS_NoExt",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "BlobToTxt",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "CopyZipToNoExt",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": false
+						}
+					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
 							"type": "AzureBlobStorageWriteSettings",
-							"copyBehavior": "FlattenHierarchy"
+							"copyBehavior": "PreserveHierarchy"
 						}
 					},
 					"enableStaging": false
