@@ -2,7 +2,7 @@
   "name": "BlobToTextDS",
   "properties": {
     "linkedServiceName": {
-      "referenceName": "AzureBlobStorageForZipExtraction",
+      "referenceName": "AzureBlobStorageH1b",
       "type": "LinkedServiceReference"
     },
     "annotations": [],
