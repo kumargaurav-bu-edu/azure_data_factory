@@ -318,6 +318,75 @@
 				"[concat(variables('factoryId'), '/datasets/ComplaintsHttpDS')]",
 				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageDS')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Test_Step2_BlobUnzip')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Test only Step 2: Unzip FLAT_CMPL.zip from Blob and write extracted files to output/extracted. Run after Step 1 has copied the zip to blob (or use Test_Step1_HttpsToBlob first).",
+				"activities": [
+					{
+						"name": "BlobToTxt",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "BinarySource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings",
+									"compressionProperties": {
+										"type": "ZipDeflateReadSettings",
+										"preserveZipFileNameAsFolder": false
+									}
+								}
+							},
+							"sink": {
+								"type": "BinarySink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "ComplaintsBlobStageDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "BlobToTextDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageDS')]",
+				"[concat(variables('factoryId'), '/datasets/BlobToTextDS')]"
+			]
 		}
 	]
 }
