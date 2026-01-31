@@ -10,10 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"container": "output"
-			},
-			"compression": {
-				"type": "ZipDeflate"
+				"folderPath": "output",
+				"container": "kgomdsconth1b"
 			}
 		}
 	},
