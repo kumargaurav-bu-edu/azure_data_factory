@@ -23,11 +23,7 @@
 							"recursive": false
 						},
 						"formatSettings": {
-							"type": "BinaryReadSettings",
-							"compressionProperties": {
-								"type": "ZipDeflateReadSettings",
-								"preserveZipFileNameAsFolder": false
-							}
+							"type": "BinaryReadSettings"
 						}
 					},
 					"sink": {
@@ -41,7 +37,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ComplaintsBlobStageDS",
+						"referenceName": "ComplaintsZipSourceDS",
 						"type": "DatasetReference"
 					}
 				],
