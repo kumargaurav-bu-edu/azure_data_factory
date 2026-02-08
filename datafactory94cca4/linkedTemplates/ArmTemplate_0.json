@@ -466,6 +466,13 @@
 									"preserveZipFileNameAsFolder": false,
 									"recursive": false,
 									"wildcardFileName": "*.txt"
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings",
+									"compressionProperties": {
+										"type": "ZipDeflateReadSettings",
+										"preserveZipFileNameAsFolder": false
+									}
 								}
 							},
 							"sink": {
