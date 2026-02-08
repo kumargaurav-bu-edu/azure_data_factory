@@ -77,7 +77,7 @@
 						]
 					},
 					{
-						"name": "CopyZipToNoExt",
+						"name": "UnzipComplaintsData",
 						"type": "Copy",
 						"dependsOn": [
 							{
@@ -100,57 +100,15 @@
 								"type": "BinarySource",
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
+									"preserveZipFileNameAsFolder": false,
 									"recursive": false
-								}
-							},
-							"sink": {
-								"type": "BinarySink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "ComplaintsBlobStageDS",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ComplaintsBlobStageNoExtDS",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "BlobToTxt",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "CopyZipToNoExt",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "BinarySource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings",
+									"compressionProperties": {
+										"type": "ZipDeflateReadSettings",
+										"preserveZipFileNameAsFolder": false
+									}
 								}
 							},
 							"sink": {
@@ -164,7 +122,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "ComplaintsZipSourceDS",
+								"referenceName": "ComplaintsBlobStageZipDS",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -187,8 +145,7 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ComplaintsHttpDS')]",
 				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageDS')]",
-				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageNoExtDS')]",
-				"[concat(variables('factoryId'), '/datasets/ComplaintsZipSourceDS')]",
+				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageZipDS')]",
 				"[concat(variables('factoryId'), '/datasets/ComplaintsExtractedDS')]"
 			]
 		},
@@ -350,29 +307,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ComplaintsBlobStageNoExtDS')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureBlobStorageH1b",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Binary",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "FLAT_CMPL",
-						"container": "output"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageH1b')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/ComplaintsBlobStageZipDS')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -440,32 +374,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/HttpServer_ComplaintsData')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ComplaintsZipSourceDS')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureBlobStorageH1b",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Binary",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "FLAT_CMPL",
-						"container": "output"
-					},
-					"compression": {
-						"type": "ZipDeflate"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageH1b')]"
 			]
 		},
 		{
