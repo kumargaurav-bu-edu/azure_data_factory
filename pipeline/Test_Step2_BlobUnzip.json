@@ -20,9 +20,16 @@
 						"type": "BinarySource",
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
+							"preserveZipFileNameAsFolder": false,
 							"recursive": false,
-							"wildcardFileName": "*.txt",
-							"preserveZipFileNameAsFolder": false
+							"wildcardFileName": "*.txt"
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings",
+							"compressionProperties": {
+								"type": "ZipDeflateReadSettings",
+								"preserveZipFileNameAsFolder": false
+							}
 						}
 					},
 					"sink": {
