@@ -1,0 +1,22 @@
+{
+	"name": "ComplaintsBlobStageZipDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageH1b",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "FLAT_CMPL.zip",
+				"container": "output"
+			},
+			"compression": {
+				"type": "ZipDeflate"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
