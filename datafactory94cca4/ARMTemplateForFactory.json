@@ -261,7 +261,7 @@
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "Test Step 2 (Professor's approach): Unzip FLAT_CMPL.zip directly using FlattenHierarchy to output/extracted/. Single activity, files placed directly in folder. Run after Test_Step1_HttpsToBlob.",
+				"description": "Test Step 2 (Professor's approach): Unzip FLAT_CMPL.zip with preserveZipFileNameAsFolder=false in storeSettings. Files go directly into output/extracted/ with original names. Run after Test_Step1_HttpsToBlob.",
 				"activities": [
 					{
 						"name": "UnzipComplaintsFile",
@@ -280,14 +280,16 @@
 								"type": "BinarySource",
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
-									"recursive": false
+									"preserveZipFileNameAsFolder": false,
+									"recursive": false,
+									"wildcardFileName": "*.txt"
 								}
 							},
 							"sink": {
 								"type": "BinarySink",
 								"storeSettings": {
 									"type": "AzureBlobStorageWriteSettings",
-									"copyBehavior": "FlattenHierarchy"
+									"copyBehavior": "PreserveHierarchy"
 								}
 							},
 							"enableStaging": false
