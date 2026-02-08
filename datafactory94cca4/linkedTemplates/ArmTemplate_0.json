@@ -464,8 +464,7 @@
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
 									"preserveZipFileNameAsFolder": false,
-									"recursive": false,
-									"wildcardFileName": "*.txt"
+									"recursive": false
 								},
 								"formatSettings": {
 									"type": "BinaryReadSettings",
