@@ -1,10 +1,10 @@
 {
-	"name": "Test_Step2_BlobUnzip",
+	"name": "Test_Step2_BlobUnzip_DelimitedSink",
 	"properties": {
-		"description": "Test Step 2 (Professor's approach): Unzip FLAT_CMPL.zip with preserveZipFileNameAsFolder=false in storeSettings. Files go directly into output/extracted/ with original names. Run after Test_Step1_HttpsToBlob.",
+		"description": "Test Step 2 with DelimitedText sink: Unzip FLAT_CMPL.zip using DelimitedText sink to test if original filename is preserved directly in folder. Run after Test_Step1_HttpsToBlob.",
 		"activities": [
 			{
-				"name": "UnzipComplaintsFile",
+				"name": "UnzipComplaintsFileDelimited",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -20,16 +20,18 @@
 						"type": "BinarySource",
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
-							"recursive": false,
-							"wildcardFileName": "*.txt",
-							"preserveZipFileNameAsFolder": false
+							"recursive": false
 						}
 					},
 					"sink": {
-						"type": "BinarySink",
+						"type": "DelimitedTextSink",
 						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings",
-							"copyBehavior": "PreserveHierarchy"
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
 						}
 					},
 					"enableStaging": false
@@ -42,7 +44,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ComplaintsExtractedDS",
+						"referenceName": "ComplaintsExtractedDelimitedDS",
 						"type": "DatasetReference"
 					}
 				]
