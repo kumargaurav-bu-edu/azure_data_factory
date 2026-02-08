@@ -77,7 +77,7 @@
 						]
 					},
 					{
-						"name": "BlobToTxt",
+						"name": "CopyZipToNoExt",
 						"type": "Copy",
 						"dependsOn": [
 							{
@@ -101,9 +101,56 @@
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
 									"recursive": false
-								},
-								"formatSettings": {
-									"type": "BinaryReadSettings"
+								}
+							},
+							"sink": {
+								"type": "BinarySink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "ComplaintsBlobStageDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ComplaintsBlobStageNoExtDS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "BlobToTxt",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "CopyZipToNoExt",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "BinarySource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": false
 								}
 							},
 							"sink": {
@@ -124,7 +171,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "BlobToTextDS",
+								"referenceName": "ComplaintsExtractedDS",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -140,8 +187,9 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ComplaintsHttpDS')]",
 				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageDS')]",
+				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageNoExtDS')]",
 				"[concat(variables('factoryId'), '/datasets/ComplaintsZipSourceDS')]",
-				"[concat(variables('factoryId'), '/datasets/BlobToTextDS')]"
+				"[concat(variables('factoryId'), '/datasets/ComplaintsExtractedDS')]"
 			]
 		},
 		{
@@ -213,10 +261,10 @@
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "Test only Step 2: Copy FLAT_CMPL.zip to FLAT_CMPL (no ext), then unzip to output/extracted/FLAT_CMPL/. Run after Step 1 (Test_Step1_HttpsToBlob) has copied the zip to blob.",
+				"description": "Test Step 2 (Professor's approach): Unzip FLAT_CMPL.zip directly using FlattenHierarchy to output/extracted/. Single activity, files placed directly in folder. Run after Test_Step1_HttpsToBlob.",
 				"activities": [
 					{
-						"name": "CopyZipToNoExt",
+						"name": "UnzipComplaintsFile",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -238,72 +286,22 @@
 							"sink": {
 								"type": "BinarySink",
 								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "ComplaintsBlobStageDS",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ComplaintsBlobStageDS_NoExt",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "BlobToTxt",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "CopyZipToNoExt",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "BinarySource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": false
-								}
-							},
-							"sink": {
-								"type": "BinarySink",
-								"storeSettings": {
 									"type": "AzureBlobStorageWriteSettings",
-									"copyBehavior": "PreserveHierarchy"
+									"copyBehavior": "FlattenHierarchy"
 								}
 							},
 							"enableStaging": false
 						},
 						"inputs": [
 							{
-								"referenceName": "ComplaintsZipSourceDS",
+								"referenceName": "ComplaintsBlobStageZipDS",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "BlobToTextDS",
+								"referenceName": "ComplaintsExtractedDS",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -316,33 +314,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageDS')]",
-				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageDS_NoExt')]",
-				"[concat(variables('factoryId'), '/datasets/ComplaintsZipSourceDS')]",
-				"[concat(variables('factoryId'), '/datasets/BlobToTextDS')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/BlobToTextDS')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureBlobStorageH1b",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Binary",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"folderPath": "extracted",
-						"container": "output"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageH1b')]"
+				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageZipDS')]",
+				"[concat(variables('factoryId'), '/datasets/ComplaintsExtractedDS')]"
 			]
 		},
 		{
@@ -369,7 +342,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ComplaintsBlobStageDS_NoExt')]",
+			"name": "[concat(parameters('factoryName'), '/ComplaintsBlobStageNoExtDS')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -383,6 +356,55 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": "FLAT_CMPL",
+						"container": "output"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageH1b')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ComplaintsBlobStageZipDS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorageH1b",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "FLAT_CMPL.zip",
+						"container": "output"
+					},
+					"compression": {
+						"type": "ZipDeflate"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageH1b')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ComplaintsExtractedDS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorageH1b",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "extracted",
 						"container": "output"
 					}
 				}
