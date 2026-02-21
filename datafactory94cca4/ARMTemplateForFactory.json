@@ -15,6 +15,22 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageH1b'"
 		},
+		"AzureSqlDatabaseKgComplaints_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabaseKgComplaints'"
+		},
+		"AzureSqlDatabaseKgComplaints_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "kgmod4server-20260221.database.windows.net"
+		},
+		"AzureSqlDatabaseKgComplaints_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "kgmod4db"
+		},
+		"AzureSqlDatabaseKgComplaints_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "omdsmod4admin"
+		},
 		"HttpServer_ComplaintsData_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://static.nhtsa.gov/odi/ffdd/cmpl/FLAT_CMPL.zip"
@@ -147,6 +163,77 @@
 				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageDS')]",
 				"[concat(variables('factoryId'), '/datasets/ComplaintsBlobStageZipDS')]",
 				"[concat(variables('factoryId'), '/datasets/ComplaintsExtractedDS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Pipeline_homework1c')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ComplaintsBlobToSql",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DelimitedTextComplaints",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlKgComplaints",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DelimitedTextComplaints')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlKgComplaints')]"
 			]
 		},
 		{
@@ -284,6 +371,236 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlKgComplaints')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseKgComplaints",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CMPLID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ODINO",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MFR_NAME",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MAKETXT",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MODELTXT",
+						"type": "nvarchar"
+					},
+					{
+						"name": "YEARTXT",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CRASH",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FAILDATE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FIRE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "INJURED",
+						"type": "decimal",
+						"precision": 2,
+						"scale": 0
+					},
+					{
+						"name": "DEATHS",
+						"type": "decimal",
+						"precision": 2,
+						"scale": 0
+					},
+					{
+						"name": "COMPDESC",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CITY",
+						"type": "nvarchar"
+					},
+					{
+						"name": "STATE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "VIN",
+						"type": "nvarchar"
+					},
+					{
+						"name": "DATEA",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LDATE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MILES",
+						"type": "decimal",
+						"precision": 7,
+						"scale": 0
+					},
+					{
+						"name": "OCCURENCES",
+						"type": "decimal",
+						"precision": 4,
+						"scale": 0
+					},
+					{
+						"name": "CDESCR",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CMPL_TYPE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "POLICE_RPT_YN",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PURCH_DT",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ORIG_OWNER_YN",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ANTI_BRAKES_YN",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CRUISE_CONT_YN",
+						"type": "nvarchar"
+					},
+					{
+						"name": "NUM_CYLS",
+						"type": "decimal",
+						"precision": 2,
+						"scale": 0
+					},
+					{
+						"name": "DRIVE_TRAIN",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FUEL_SYS",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FUEL_TYPE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TRANS_TYPE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "VEH_SPEED",
+						"type": "decimal",
+						"precision": 3,
+						"scale": 0
+					},
+					{
+						"name": "DOT",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TIRE_SIZE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LOC_OF_TIRE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TIRE_FAIL_TYPE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ORIG_EQUIP_YN",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MANUF_DT",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SEAT_TYPE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "RESTRAINT_TYPE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "DEALER_NAME",
+						"type": "nvarchar"
+					},
+					{
+						"name": "DEALER_TEL",
+						"type": "nvarchar"
+					},
+					{
+						"name": "DEALER_CITY",
+						"type": "nvarchar"
+					},
+					{
+						"name": "DEALER_STATE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "DEALER_ZIP",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PROD_TYPE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "REPAIRED_YN",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MEDICAL_ATTN",
+						"type": "nvarchar"
+					},
+					{
+						"name": "VEHICLES_TOWED_YN",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "kgcomplaints"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabaseKgComplaints')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ComplaintsBlobStageDS')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -377,6 +694,44 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedTextComplaints')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorageH1b",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "FLAT_CMPL.txt",
+						"folderPath": "extracted",
+						"container": "output"
+					},
+					"columnDelimiter": "\t",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "1\t958241\tVolvo Car USA",
+						"type": "String"
+					},
+					{
+						"name": " LLC\tVOLVO\t760\t1987\tN\t\tN\t0\t0\tENGINE AND ENGINE COOLING:COOLING SYSTEM:RADIATOR ASSEMBLY\tEL CAJON    \tCA\t\t19950103\t19950103\t\t\tRADIATOR FAILED @ HIGHWAY SPEED OBSTRUCTING DRIVERS VISION TEMPORARY. PLEASE DESCRIBE DETAILS.  TT\tEVOQ\tN\t\tN\tN\tN\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tV\t\tN\tN",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageH1b')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureBlobStorageForZipExtraction')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -398,6 +753,28 @@
 				"type": "AzureBlobStorage",
 				"typeProperties": {
 					"connectionString": "[parameters('AzureBlobStorageH1b_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabaseKgComplaints')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('AzureSqlDatabaseKgComplaints_properties_typeProperties_server')]",
+					"database": "[parameters('AzureSqlDatabaseKgComplaints_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureSqlDatabaseKgComplaints_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureSqlDatabaseKgComplaints_password')]"
+					}
 				}
 			},
 			"dependsOn": []

@@ -11,6 +11,18 @@
 		"AzureBlobStorageH1b_connectionString": {
 			"value": ""
 		},
+		"AzureSqlDatabaseKgComplaints_password": {
+			"value": ""
+		},
+		"AzureSqlDatabaseKgComplaints_properties_typeProperties_server": {
+			"value": "kgmod4server-20260221.database.windows.net"
+		},
+		"AzureSqlDatabaseKgComplaints_properties_typeProperties_database": {
+			"value": "kgmod4db"
+		},
+		"AzureSqlDatabaseKgComplaints_properties_typeProperties_userName": {
+			"value": "omdsmod4admin"
+		},
 		"HttpServer_ComplaintsData_properties_typeProperties_url": {
 			"value": "https://static.nhtsa.gov/odi/ffdd/cmpl/FLAT_CMPL.zip"
 		},
