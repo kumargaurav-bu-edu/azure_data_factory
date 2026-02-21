@@ -1,0 +1,24 @@
+{
+	"name": "ComplaintsDelimitedTextDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageH1b",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "FLAT_CMPL.txt",
+				"folderPath": "extracted",
+				"container": "output"
+			},
+			"columnDelimiter": "\t",
+			"escapeChar": "\\",
+			"firstRowAsHeader": false,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
