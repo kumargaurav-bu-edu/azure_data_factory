@@ -1,1 +1,15 @@
 .vscode/*
+.env
+.DS_Store
+.cursorrules
+.sfdx/*
+*.zip
+*.txt
+*.csv
+*.json
+*.xml
+*.html
+*.css
+*.js
+*.ts
+*.log
