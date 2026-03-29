@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'AzureSqlDatabaseKgComplaints'"
 		},
+		"CosmosDB_Connection_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'CosmosDB_Connection'"
+		},
 		"AzureSqlDatabaseKgComplaints_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "kgmod4server-20260221.database.windows.net"
@@ -30,6 +34,10 @@
 		"AzureSqlDatabaseKgComplaints_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "omdsmod4admin"
+		},
+		"HTTP_TMDB_Connection_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://mod4.blob.core.windows.net/hw2/"
 		},
 		"HttpServer_ComplaintsData_properties_typeProperties_url": {
 			"type": "string",
@@ -866,6 +874,67 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_homework2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CopyTMDBDataset",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "JsonSource",
+								"storeSettings": {
+									"type": "HttpReadSettings",
+									"requestMethod": "GET"
+								},
+								"formatSettings": {
+									"type": "JsonReadSettings"
+								}
+							},
+							"sink": {
+								"type": "CosmosDbSqlApiSink",
+								"writeBehavior": "insert"
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "HTTP_TMDB_Movies_JSON",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "CosmosDB_Movies_Sink",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/HTTP_TMDB_Movies_JSON')]",
+				"[concat(variables('factoryId'), '/datasets/CosmosDB_Movies_Sink')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ComplaintsBlobStageDS')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1218,6 +1287,169 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDB_Movies_Sink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CosmosDB_Connection",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbSqlApiCollection",
+				"schema": {},
+				"typeProperties": {
+					"collectionName": "movies"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/CosmosDB_Connection')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/HTTP_TMDB_Movies_JSON')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "HTTP_TMDB_Connection",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "HttpServerLocation",
+						"relativeUrl": "tmdb_5000_movies.json"
+					},
+					"jsonNodeReference": "$[*]"
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"budget": {
+							"type": "integer"
+						},
+						"genres": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer"
+									},
+									"name": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"homepage": {
+							"type": "string"
+						},
+						"id": {
+							"type": "integer"
+						},
+						"keywords": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer"
+									},
+									"name": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"original_language": {
+							"type": "string"
+						},
+						"original_title": {
+							"type": "string"
+						},
+						"overview": {
+							"type": "string"
+						},
+						"popularity": {
+							"type": "number"
+						},
+						"production_companies": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"id": {
+										"type": "integer"
+									}
+								}
+							}
+						},
+						"production_countries": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"iso_3166_1": {
+										"type": "string"
+									},
+									"name": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"release_date": {
+							"type": "string"
+						},
+						"revenue": {
+							"type": "integer"
+						},
+						"runtime": {
+							"type": "integer"
+						},
+						"spoken_languages": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"iso_639_1": {
+										"type": "string"
+									},
+									"name": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"status": {
+							"type": "string"
+						},
+						"tagline": {
+							"type": "string"
+						},
+						"title": {
+							"type": "string"
+						},
+						"vote_average": {
+							"type": "number"
+						},
+						"vote_count": {
+							"type": "integer"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/HTTP_TMDB_Connection')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureBlobStorageForZipExtraction')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -1261,6 +1493,34 @@
 						"type": "SecureString",
 						"value": "[parameters('AzureSqlDatabaseKgComplaints_password')]"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDB_Connection')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "CosmosDb",
+				"typeProperties": {
+					"connectionString": "[parameters('CosmosDB_Connection_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/HTTP_TMDB_Connection')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HttpServer",
+				"typeProperties": {
+					"url": "[parameters('HTTP_TMDB_Connection_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
 				}
 			},
 			"dependsOn": []
