@@ -1,0 +1,138 @@
+{
+	"name": "HTTP_TMDB_Movies_JSON",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "HTTP_TMDB_Connection",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "tmdb_5000_movies.json"
+			},
+			"jsonNodeReference": "$[*]"
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"budget": {
+					"type": "integer"
+				},
+				"genres": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer"
+							},
+							"name": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"homepage": {
+					"type": "string"
+				},
+				"id": {
+					"type": "integer"
+				},
+				"keywords": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer"
+							},
+							"name": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"original_language": {
+					"type": "string"
+				},
+				"original_title": {
+					"type": "string"
+				},
+				"overview": {
+					"type": "string"
+				},
+				"popularity": {
+					"type": "number"
+				},
+				"production_companies": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"id": {
+								"type": "integer"
+							}
+						}
+					}
+				},
+				"production_countries": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"iso_3166_1": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"release_date": {
+					"type": "string"
+				},
+				"revenue": {
+					"type": "integer"
+				},
+				"runtime": {
+					"type": "integer"
+				},
+				"spoken_languages": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"iso_639_1": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"status": {
+					"type": "string"
+				},
+				"tagline": {
+					"type": "string"
+				},
+				"title": {
+					"type": "string"
+				},
+				"vote_average": {
+					"type": "number"
+				},
+				"vote_count": {
+					"type": "integer"
+				}
+			}
+		}
+	}
+}

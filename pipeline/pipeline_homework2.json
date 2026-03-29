@@ -1,0 +1,180 @@
+{
+	"name": "pipeline_homework2",
+	"properties": {
+		"activities": [
+			{
+				"name": "CopyTMDBDataset",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"requestMethod": "GET"
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "CosmosDbSqlApiSink",
+						"writeBehavior": "insert"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['budget']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['genres'][0]['id']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['genres'][0]['name']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['homepage']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['id']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['keywords'][0]['id']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['keywords'][0]['name']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['original_language']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['original_title']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['overview']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['popularity']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['production_companies'][0]['name']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['production_companies'][0]['id']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['production_countries'][0]['iso_3166_1']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['production_countries'][0]['name']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['release_date']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['revenue']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['runtime']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['spoken_languages'][0]['iso_639_1']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['spoken_languages'][0]['name']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['status']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['tagline']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['title']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['vote_average']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['vote_count']"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "HTTP_TMDB_Movies_JSON",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "CosmosDB_Movies_Sink",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}

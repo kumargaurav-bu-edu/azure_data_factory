@@ -1,0 +1,15 @@
+{
+	"name": "CosmosDB_Movies_Sink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "CosmosDB_Connection",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "CosmosDbSqlApiCollection",
+		"schema": {},
+		"typeProperties": {
+			"collectionName": "movies"
+		}
+	}
+}
