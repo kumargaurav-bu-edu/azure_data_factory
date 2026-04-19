@@ -943,6 +943,52 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pl_NHTSAComplaintsToParquet')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "df_NHTSAComplaintsToParquet",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_NHTSAComplaintsToParquet",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"sourceNHTSA": {},
+									"sinkParquet": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_NHTSAComplaintsToParquet')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ComplaintsBlobStageDS')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1629,43 +1675,43 @@
 					],
 					"scriptLines": [
 						"source(output(",
-						"          {_col0_} as short,",
-						"          {_col1_} as integer,",
+						"          {_col0_} as string,",
+						"          {_col1_} as string,",
 						"          {_col2_} as string,",
 						"          {_col3_} as string,",
 						"          {_col4_} as string,",
-						"          {_col5_} as short,",
-						"          {_col6_} as boolean,",
-						"          {_col7_} as date,",
-						"          {_col8_} as boolean,",
+						"          {_col5_} as string,",
+						"          {_col6_} as string,",
+						"          {_col7_} as string,",
+						"          {_col8_} as string,",
 						"          {_col9_} as short,",
-						"          {_col10_} as boolean,",
+						"          {_col10_} as short,",
 						"          {_col11_} as string,",
 						"          {_col12_} as string,",
 						"          {_col13_} as string,",
 						"          {_col14_} as string,",
-						"          {_col15_} as date,",
-						"          {_col16_} as date,",
-						"          {_col17_} as string,",
+						"          {_col15_} as string,",
+						"          {_col16_} as string,",
+						"          {_col17_} as integer,",
 						"          {_col18_} as short,",
 						"          {_col19_} as string,",
 						"          {_col20_} as string,",
-						"          {_col21_} as boolean,",
+						"          {_col21_} as string,",
 						"          {_col22_} as string,",
-						"          {_col23_} as boolean,",
-						"          {_col24_} as boolean,",
-						"          {_col25_} as boolean,",
-						"          {_col26_} as string,",
+						"          {_col23_} as string,",
+						"          {_col24_} as string,",
+						"          {_col25_} as string,",
+						"          {_col26_} as short,",
 						"          {_col27_} as string,",
 						"          {_col28_} as string,",
 						"          {_col29_} as string,",
 						"          {_col30_} as string,",
-						"          {_col31_} as boolean,",
+						"          {_col31_} as short,",
 						"          {_col32_} as string,",
 						"          {_col33_} as string,",
 						"          {_col34_} as string,",
 						"          {_col35_} as string,",
-						"          {_col36_} as boolean,",
+						"          {_col36_} as string,",
 						"          {_col37_} as string,",
 						"          {_col38_} as string,",
 						"          {_col39_} as string,",
@@ -1675,14 +1721,13 @@
 						"          {_col43_} as string,",
 						"          {_col44_} as string,",
 						"          {_col45_} as string,",
-						"          {_col46_} as boolean,",
-						"          {_col47_} as boolean,",
-						"          {_col48_} as boolean",
+						"          {_col46_} as string,",
+						"          {_col47_} as string,",
+						"          {_col48_} as string",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     partitionBy('hash', 1)) ~> sourceNHTSA",
+						"     ignoreNoFilesFound: false) ~> sourceNHTSA",
 						"sourceNHTSA filter(!endsWith({_col2_}, \".\")) ~> filterManufacturer",
 						"filterManufacturer derive(filename = concat({_col2_}, '.parquet')) ~> derivedFileName",
 						"derivedFileName sink(allowSchemaDrift: true,",
@@ -1716,34 +1761,34 @@
 						"          OCCURENCES = {_col18_},",
 						"          CDESCR = {_col19_},",
 						"          CMPL_TYPE = {_col20_},",
-						"          FUTURE_USE = {_col21_},",
-						"          ORIG_OWNER_YN = {_col22_},",
-						"          ANTI_BRAKES_YN = {_col23_},",
-						"          CRUISE_CONT_YN = {_col24_},",
-						"          NUM_CYLS = {_col25_},",
-						"          DRIVE_TRAIN = {_col26_},",
-						"          FUEL_SYS = {_col27_},",
-						"          FUEL_TYPE = {_col28_},",
-						"          TRANS_TYPE = {_col29_},",
-						"          VEH_SPEED = {_col30_},",
-						"          DOT_NUM = {_col31_},",
-						"          TIRE_SIZE = {_col32_},",
-						"          LOC_OF_TIRE = {_col33_},",
-						"          TIRE_FAIL_TYPE = {_col34_},",
-						"          ORIG_EQUIP_YN = {_col35_},",
-						"          MANUF_DT = {_col36_},",
-						"          SEAT_TYPE = {_col37_},",
-						"          RESTRAINT_TYPE = {_col38_},",
-						"          DEALER_NAME = {_col39_},",
-						"          DEALER_TEL = {_col40_},",
-						"          DEALER_CITY = {_col41_},",
-						"          DEALER_STATE = {_col42_},",
-						"          DEALER_ZIP = {_col43_},",
-						"          PROD_TYPE = {_col44_},",
-						"          REPAIRED_YN = {_col45_},",
-						"          MEDICAL_ATTN = {_col46_},",
-						"          VEHICLES_TOWED_YN = {_col47_},",
-						"          PURCH_DT = {_col48_},",
+						"          POLICE_RPT_YN = {_col21_},",
+						"          PURCH_DT = {_col22_},",
+						"          ORIG_OWNER_YN = {_col23_},",
+						"          ANTI_BRAKES_YN = {_col24_},",
+						"          CRUISE_CONT_YN = {_col25_},",
+						"          NUM_CYLS = {_col26_},",
+						"          DRIVE_TRAIN = {_col27_},",
+						"          FUEL_SYS = {_col28_},",
+						"          FUEL_TYPE = {_col29_},",
+						"          TRANS_TYPE = {_col30_},",
+						"          VEH_SPEED = {_col31_},",
+						"          DOT = {_col32_},",
+						"          TIRE_SIZE = {_col33_},",
+						"          LOC_OF_TIRE = {_col34_},",
+						"          TIRE_FAIL_TYPE = {_col35_},",
+						"          ORIG_EQUIP_YN = {_col36_},",
+						"          MANUF_DT = {_col37_},",
+						"          SEAT_TYPE = {_col38_},",
+						"          RESTRAINT_TYPE = {_col39_},",
+						"          DEALER_NAME = {_col40_},",
+						"          DEALER_TEL = {_col41_},",
+						"          DEALER_CITY = {_col42_},",
+						"          DEALER_STATE = {_col43_},",
+						"          DEALER_ZIP = {_col44_},",
+						"          PROD_TYPE = {_col45_},",
+						"          REPAIRED_YN = {_col46_},",
+						"          MEDICAL_ATTN = {_col47_},",
+						"          VEHICLES_TOWED_YN = {_col48_},",
 						"          filename",
 						"     )) ~> sinkParquet"
 					]
@@ -1753,52 +1798,6 @@
 				"[concat(variables('factoryId'), '/datasets/ComplaintsDelimitedTextDS')]",
 				"[concat(variables('factoryId'), '/datasets/ds_ADLS_Parquet')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_ADLS_Gen2')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_NHTSAComplaintsToParquet')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "df_NHTSAComplaintsToParquet",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "df_NHTSAComplaintsToParquet",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"sourceNHTSA": {},
-									"sinkParquet": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/df_NHTSAComplaintsToParquet')]"
 			]
 		}
 	]
