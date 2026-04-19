@@ -17,6 +17,9 @@
 		"CosmosDB_Connection_connectionString": {
 			"value": ""
 		},
+		"ls_ADLS_Gen2_accountKey": {
+			"value": ""
+		},
 		"AzureSqlDatabaseKgComplaints_properties_typeProperties_server": {
 			"value": "kgmod4server-20260221.database.windows.net"
 		},
@@ -31,6 +34,9 @@
 		},
 		"HttpServer_ComplaintsData_properties_typeProperties_url": {
 			"value": "https://static.nhtsa.gov/odi/ffdd/cmpl/FLAT_CMPL.zip"
+		},
+		"ls_ADLS_Gen2_properties_typeProperties_url": {
+			"value": "https://kgomdssa.dfs.core.windows.net/"
 		},
 		"containerUri": {
 			"value": ""
