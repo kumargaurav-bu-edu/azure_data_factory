@@ -1,0 +1,20 @@
+{
+	"name": "ds_ADLS_Parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_ADLS_Gen2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "output",
+				"fileSystem": "kghomework3a"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
