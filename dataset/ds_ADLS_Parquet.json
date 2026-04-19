@@ -11,7 +11,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"folderPath": "output",
-				"fileSystem": "kghomework3a"
+				"fileSystem": "homework3"
 			},
 			"compressionCodec": "snappy"
 		},
