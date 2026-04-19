@@ -87,7 +87,8 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> sourceNHTSA",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('hash', 1)) ~> sourceNHTSA",
 				"sourceNHTSA filter(!endsWith({_col2_}, \".\")) ~> filterManufacturer",
 				"filterManufacturer derive(filename = concat({_col2_}, '.parquet')) ~> derivedFileName",
 				"derivedFileName sink(allowSchemaDrift: true,",
@@ -150,8 +151,7 @@
 				"          VEHICLES_TOWED_YN = {_col47_},",
 				"          PURCH_DT = {_col48_},",
 				"          filename",
-				"     ),",
-				"     partitionBy('hash', 1)) ~> sinkParquet"
+				"     )) ~> sinkParquet"
 			]
 		}
 	}
